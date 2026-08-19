@@ -33,13 +33,28 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function sourceShell(cfg,r){
   return `<section class="exact-source-view" data-exact-route="${esc(r)}">
     <div class="exact-source-bar">
-      <div><span>EXACT SOURCE VIEW</span><b>${esc(cfg.system)}</b><small>This is the current hosted dashboard page, not a Ken’s Life redesign.</small></div>
+      <div><span>LIVE SOURCE DASHBOARD</span><b>${esc(cfg.system)}</b><small>Use this dashboard’s own sidebar to move between its pages.</small></div>
       <a href="${esc(cfg.url)}" target="_blank" rel="noopener">Open original ↗</a>
     </div>
     <div class="exact-source-stage">
-      <iframe class="exact-source-frame" src="${esc(cfg.url)}" title="${esc(cfg.system)} — exact source page" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <iframe class="exact-source-frame" src="${esc(cfg.url)}" title="${esc(cfg.system)} — live source dashboard" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </section>`;
+}
+
+function setOuterChrome(cfg,r){
+  const kicker=document.getElementById('page-kicker');
+  const title=document.getElementById('page-title');
+  if(kicker)kicker.textContent='DASHBOARD';
+  if(title)title.textContent=cfg.system;
+  document.querySelectorAll('.nav-item').forEach(a=>{
+    const ar=a.dataset.route;
+    let on=ar===r;
+    if(cfg.system==='Personal OS'&&ar==='health')on=true;
+    if(cfg.system==='Primeva OS'&&ar==='primeva-ceo')on=true;
+    if(cfg.system==='Three Rivers Territory OS'&&ar==='tr-today')on=true;
+    a.classList.toggle('on',on);
+  });
 }
 
 function apply(){
@@ -48,6 +63,7 @@ function apply(){
   if(!cfg||nativeOnly.has(r))return;
   const view=document.getElementById('view');
   if(!view)return;
+  setOuterChrome(cfg,r);
   if(view.querySelector(`.exact-source-view[data-exact-route="${CSS.escape(r)}"]`))return;
   applying=true;
   view.innerHTML=sourceShell(cfg,r);
@@ -55,7 +71,7 @@ function apply(){
   applying=false;
 }
 
-// The base app renders first; this layer replaces only detailed source-system routes.
+// The base app renders first; this layer replaces only source-dashboard routes.
 window.addEventListener('hashchange',()=>setTimeout(apply,0));
 window.addEventListener('load',()=>setTimeout(apply,50));
 
