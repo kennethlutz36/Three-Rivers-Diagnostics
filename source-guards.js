@@ -13,18 +13,18 @@ document.addEventListener('submit',e=>{
   n.textContent='Three Rivers tasks must be linked to an account because the source CRM requires account_id.';
 },true);
 
-// Exact-source parity layer. Each source system is presented as one complete
-// dashboard and uses its own internal navigation.
+// Exact source layer: Personal OS pages are promoted into Ken's Life tabs,
+// while Primeva and Three Rivers remain complete embedded dashboards.
 if(!document.querySelector('link[data-kens-exact-source]')){
   const l=document.createElement('link');
   l.rel='stylesheet';
-  l.href='exact-source-pages.css?v=3';
+  l.href='exact-source-pages.css?v=4';
   l.dataset.kensExactSource='1';
   document.head.appendChild(l);
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=3';
+  s.src='exact-source-pages.js?v=4';
   s.dataset.kensExactSource='1';
   document.body.appendChild(s);
 }
