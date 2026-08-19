@@ -16,12 +16,13 @@
 
   <section id="auth" class="auth hidden">
     <div class="auth-card">
-      <div class="auth-brand"><div class="brand-mark">K</div><div><h1>Ken's Life</h1><p>One operating system. Your existing dashboards stay independent.</p></div></div>
+      <div class="auth-brand"><div class="brand-mark">K</div><div><h1>Ken's Life</h1><p>Passwordless access to your master command center.</p></div></div>
       <form id="login-form">
-        <label>Email<input id="login-email" type="email" value="kennethlutz36@gmail.com" autocomplete="username" required /></label>
-        <label>Password<input id="login-password" type="password" autocomplete="current-password" required /></label>
-        <button class="btn primary wide" type="submit">Sign in</button>
+        <label>Email<input id="login-email" type="email" value="kennethlutz36@gmail.com" autocomplete="email" required /></label>
+        <input id="login-password" type="hidden" value="" />
+        <button class="btn primary wide" type="submit">Email me a sign-in link</button>
         <div id="login-error" class="form-error"></div>
+        <p style="margin:10px 0 0;color:#7b8b97;font-size:11px;line-height:1.45">We’ll email you a secure one-time link. Tap it on this device to sign in—no password to remember.</p>
       </form>
     </div>
   </section>
@@ -73,6 +74,7 @@
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="reference-data.js?v=1"></script>
+  <script type="module" src="passwordless-auth.js?v=1"></script>
   <script type="module" src="app.js?v=1"></script>
   <script type="module" src="pipeline-parity.js?v=1"></script>
   <script type="module" src="life-parity.js?v=1"></script>
