@@ -2,7 +2,7 @@
 'use strict';
 if(window.__kensExactSourcePages)return; window.__kensExactSourcePages=1;
 
-const PERSONAL_BASE='https://kennethlutz36.github.io/personal-os/';
+const PERSONAL_BASE='https://kennethlutz36.github.io/personal-os/?embed=kens-life-v7';
 const PERSONAL_ROUTE={
   'To-Do':'tasks',
   'Calendar':'calendar',
@@ -20,14 +20,12 @@ const SOURCES={
   health:{system:'Health',url:PERSONAL_BASE,personalTarget:'Health'},
   life:{system:'Life',url:PERSONAL_BASE,personalTarget:'Life'},
   settings:{system:'Settings',url:PERSONAL_BASE,personalTarget:'Settings'},
-
   'primeva-ceo':{system:'Primeva OS',url:'https://primeva-os.vercel.app/overview',external:true},
   'primeva-finance':{system:'Primeva OS',url:'https://primeva-os.vercel.app/finances',external:true},
   'labs-crm':{system:'Primeva OS',url:'https://primeva-os.vercel.app/labs/crm',external:true},
   'labs-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/labs/content',external:true},
   'health-crm':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/crm',external:true},
   'health-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/content',external:true},
-
   'tr-today':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#command',external:true},
   'tr-active':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#accounts',external:true},
   'tr-pipeline':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#pipeline',external:true},
@@ -37,12 +35,13 @@ const SOURCES={
   'tr-payors':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#payors',external:true}
 };
 
-let lastRoute='';
 let applying=false;
+let viewObserver=null;
+let resizeTimer=null;
 
-function route(){return location.hash.replace(/^#/,'')||'home'}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function norm(v){return String(v||'').replace(/\s+/g,' ').trim().toLowerCase()}
+const route=()=>location.hash.replace(/^#/,'')||'home';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=v=>String(v||'').replace(/\s+/g,' ').trim().toLowerCase();
 
 function sourceShell(cfg,r){
   return `<section class="exact-source-view ${cfg.personalTarget?'personal-source-view':'external-source-view'}" data-exact-route="${esc(r)}">
@@ -73,58 +72,38 @@ function findPersonalNav(doc,target){
   const zones=[...doc.querySelectorAll('aside,nav,[class*="sidebar" i],[class*="nav" i]')];
   const candidates=(zones.length?zones:[doc.body]).flatMap(z=>[...z.querySelectorAll('a,button,[role="button"]')]);
   return candidates.find(el=>wanted.includes(norm(el.textContent)))||
-         [...doc.querySelectorAll('a,button,[role="button"]')].find(el=>wanted.includes(norm(el.textContent)));
+    [...doc.querySelectorAll('a,button,[role="button"]')].find(el=>wanted.includes(norm(el.textContent)));
 }
 
-function detectPersonalSidebar(doc){
+function fallbackChrome(doc){
   const zones=[...doc.querySelectorAll('aside,[class*="sidebar" i],[data-pos-mobile-sidebar]')];
   const sidebar=zones.find(el=>{
     const r=el.getBoundingClientRect();
     const t=norm(el.textContent);
-    return r.width>=150&&r.width<=360&&r.height>300&&r.left<20&&
+    return r.width>=150&&r.width<=380&&r.height>300&&r.left<20&&
       (t.includes('personal os')||((t.includes('calendar')||t.includes('to-do')||t.includes('tasks'))&&t.includes('finance')&&t.includes('health')));
   });
-  if(!sidebar)return 0;
-  const r=sidebar.getBoundingClientRect();
-  return Math.max(0,Math.round(r.right));
-}
-
-function detectPersonalHeader(doc,leftCrop){
+  const left=sidebar?Math.max(0,Math.round(sidebar.getBoundingClientRect().right)):0;
   const headers=[...doc.querySelectorAll('header,[class*="topbar" i],[class*="header" i]')];
   const header=headers.find(el=>{
     const r=el.getBoundingClientRect();
-    if(r.top>24||r.height<35||r.height>130)return false;
+    if(r.top>24||r.height<35||r.height>140)return false;
     const t=norm(el.textContent);
     return (t.includes('start day')&&t.includes('ai brief'))||
       (t.includes('live')&&t.includes('synced')&&t.includes('sign out'))||
-      (r.left>=Math.max(0,leftCrop-20)&&r.width>500);
+      (r.left>=Math.max(0,left-20)&&r.width>Math.max(480,(doc.defaultView?.innerWidth||800)*.55));
   });
-  if(!header)return 0;
-  const r=header.getBoundingClientRect();
-  return Math.max(0,Math.round(r.bottom));
+  const top=header?Math.max(0,Math.round(header.getBoundingClientRect().bottom)):0;
+  return {left,top};
 }
 
-function prepPersonalDoc(doc){
-  // Personal OS mobile navigation is redundant inside Ken's Life.
-  const mobileNav=doc.getElementById('posv10MobileNav');
-  if(mobileNav)mobileNav.style.setProperty('display','none','important');
-}
-
-function cropPersonalFrame(frame){
-  try{
-    const doc=frame.contentDocument;
-    if(!doc?.body)return false;
-    prepPersonalDoc(doc);
-    const left=detectPersonalSidebar(doc);
-    const top=detectPersonalHeader(doc,left);
-    frame.style.position='absolute';
-    frame.style.maxWidth='none';
-    frame.style.left=`-${left}px`;
-    frame.style.top=`-${top}px`;
-    frame.style.width=`calc(100% + ${left}px)`;
-    frame.style.height=`calc(100% + ${top}px)`;
-    return true;
-  }catch{return false}
+function applyCrop(frame,left=0,top=0){
+  frame.style.position='absolute';
+  frame.style.maxWidth='none';
+  frame.style.left=`-${Math.max(0,left)}px`;
+  frame.style.top=`-${Math.max(0,top)}px`;
+  frame.style.width=`calc(100% + ${Math.max(0,left)}px)`;
+  frame.style.height=`calc(100% + ${Math.max(0,top)}px)`;
 }
 
 function routePersonalFrame(frame,target){
@@ -132,12 +111,11 @@ function routePersonalFrame(frame,target){
     const win=frame.contentWindow;
     const key=PERSONAL_ROUTE[target];
     if(!key||!win)return false;
-    if(win.state&&typeof win.render==='function'){
-      if(String(win.state.route||'')!==key){
-        win.state.route=key;
-        win.render();
-      }
-      return true;
+    const api=win.KensLifeEmbed;
+    if(api?.ready?.()){
+      api.prepare?.();
+      if(api.current?.()!==key)api.navigate(key);
+      return api.current?.()===key;
     }
     const doc=frame.contentDocument;
     const nav=doc&&findPersonalNav(doc,target);
@@ -146,18 +124,36 @@ function routePersonalFrame(frame,target){
   return false;
 }
 
+function cropPersonalFrame(frame){
+  try{
+    const win=frame.contentWindow;
+    const doc=frame.contentDocument;
+    if(!doc?.body)return false;
+    let metrics=null;
+    const api=win?.KensLifeEmbed;
+    if(api?.ready?.()){
+      api.prepare?.();
+      metrics=api.chrome?.();
+    }
+    if(!metrics)metrics=fallbackChrome(doc);
+    applyCrop(frame,metrics.left||0,metrics.top||0);
+    return true;
+  }catch{return false}
+}
+
 function wirePersonalFrame(frame,target){
   if(!frame||!target)return;
   let attempts=0;
+  let stable=0;
   const settle=()=>{
     attempts++;
     const routed=routePersonalFrame(frame,target);
     const cropped=cropPersonalFrame(frame);
-    // Personal OS applies several post-render patches; re-assert route/crop while they settle.
-    if(attempts<20&&(!routed||!cropped||attempts<8))setTimeout(settle,250);
+    if(routed&&cropped)stable++; else stable=0;
+    if(attempts<24&&stable<3)setTimeout(settle,180);
   };
-  frame.addEventListener('load',()=>{attempts=0;setTimeout(settle,70)},{once:false});
-  setTimeout(settle,100);
+  frame.addEventListener('load',()=>{attempts=0;stable=0;setTimeout(settle,50)});
+  setTimeout(settle,80);
 }
 
 function apply(){
@@ -167,26 +163,55 @@ function apply(){
   const view=document.getElementById('view');
   if(!view)return;
   setOuterChrome(cfg);
-  if(view.querySelector(`.exact-source-view[data-exact-route="${CSS.escape(r)}"]`))return;
+  const existing=view.querySelector(`.exact-source-view[data-exact-route="${r}"]`);
+  if(existing){
+    if(cfg.personalTarget){
+      const frame=existing.querySelector('.exact-source-frame');
+      if(frame){routePersonalFrame(frame,cfg.personalTarget);cropPersonalFrame(frame)}
+    }
+    return;
+  }
   applying=true;
   view.innerHTML=sourceShell(cfg,r);
   const frame=view.querySelector('.exact-source-frame');
   if(cfg.personalTarget)wirePersonalFrame(frame,cfg.personalTarget);
-  lastRoute=r;
   applying=false;
 }
 
-window.addEventListener('hashchange',()=>setTimeout(apply,0));
-window.addEventListener('load',()=>setTimeout(apply,50));
+function installViewObserver(){
+  const view=document.getElementById('view');
+  if(!view||viewObserver)return;
+  viewObserver=new MutationObserver(()=>{
+    const r=route();
+    if(!SOURCES[r])return;
+    if(!view.querySelector(`.exact-source-view[data-exact-route="${r}"]`))queueMicrotask(apply);
+  });
+  viewObserver.observe(view,{childList:true});
+}
 
-const mo=new MutationObserver(()=>{
-  const r=route();
-  if(SOURCES[r])requestAnimationFrame(apply);
+window.addEventListener('hashchange',()=>requestAnimationFrame(apply));
+window.addEventListener('load',()=>{installViewObserver();setTimeout(apply,40)});
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{
+    const cfg=SOURCES[route()];
+    if(!cfg?.personalTarget)return;
+    const frame=document.querySelector('.personal-source-view .exact-source-frame');
+    if(frame)cropPersonalFrame(frame);
+  },120);
 });
-mo.observe(document.documentElement,{subtree:true,childList:true});
 
-setInterval(()=>{
-  const r=route();
-  if(r!==lastRoute||SOURCES[r])apply();
-},500);
+document.addEventListener('click',e=>{
+  const refresh=e.target.closest?.('#refresh');
+  const cfg=SOURCES[route()];
+  if(!refresh||!cfg?.personalTarget)return;
+  const frame=document.querySelector('.personal-source-view .exact-source-frame');
+  if(!frame)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  try{frame.contentWindow.location.reload()}catch{frame.src=frame.src}
+},true);
+
+installViewObserver();
+setTimeout(apply,60);
 })();
