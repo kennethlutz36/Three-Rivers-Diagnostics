@@ -1,1 +1,1 @@
-{"name":"kens-life","private":true,"version":"1.0.0","type":"module","scripts":{"check":"node --check app.js"}}
+{"name":"kens-life","private":true,"version":"1.0.0","type":"module","scripts":{"check":"node --check app.js && node --check pipeline-parity.js && node --check life-parity.js && node --check reference-data.js"}}
