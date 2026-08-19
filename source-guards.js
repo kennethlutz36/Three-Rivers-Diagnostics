@@ -18,13 +18,13 @@ document.addEventListener('submit',e=>{
 if(!document.querySelector('link[data-kens-exact-source]')){
   const l=document.createElement('link');
   l.rel='stylesheet';
-  l.href='exact-source-pages.css?v=4';
+  l.href='exact-source-pages.css?v=5';
   l.dataset.kensExactSource='1';
   document.head.appendChild(l);
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=4';
+  s.src='exact-source-pages.js?v=5';
   s.dataset.kensExactSource='1';
   document.body.appendChild(s);
 }
