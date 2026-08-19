@@ -4,10 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#08131c" />
+  <meta name="color-scheme" content="light" />
+  <meta name="format-detection" content="telephone=no" />
   <title>Ken's Life</title>
-  <link rel="manifest" href="manifest.webmanifest?v=1" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=1" />
+  <link rel="manifest" href="manifest.webmanifest?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2" />
+  <link rel="icon" type="image/svg+xml" href="app-icon.svg?v=2" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Ken's Life" />
@@ -16,7 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="styles.css?v=1" />
-  <link rel="stylesheet" href="master-switcher.css?v=2" />
+  <link rel="stylesheet" href="master-switcher.css?v=3" />
 </head>
 <body>
   <div id="boot" class="boot"><div class="boot-mark">K</div><div><b>Ken's Life</b><span>Loading your command center…</span></div></div>
@@ -25,10 +29,10 @@
     <div class="auth-card">
       <div class="auth-brand"><div class="brand-mark">K</div><div><h1>Ken's Life</h1><p>Passwordless access to your master command center.</p></div></div>
       <form id="login-form">
-        <label>Email<input id="login-email" type="email" value="kennethlutz36@gmail.com" autocomplete="email" required /></label>
+        <label>Email<input id="login-email" type="email" value="kennethlutz36@gmail.com" autocomplete="email" inputmode="email" required /></label>
         <input id="login-password" type="hidden" value="" />
         <button class="btn primary wide" type="submit">Email me a sign-in link</button>
-        <div id="login-error" class="form-error"></div>
+        <div id="login-error" class="form-error" aria-live="polite"></div>
         <p style="margin:10px 0 0;color:#7b8b97;font-size:11px;line-height:1.45">We’ll email you a secure one-time link. Tap it on this device to sign in—no password to remember.</p>
       </form>
     </div>
@@ -56,12 +60,12 @@
       <header class="topbar">
         <button class="icon-btn mobile-only" id="open-nav" aria-label="Open navigation"><i data-lucide="menu"></i></button>
         <div class="master-switcher" id="master-switcher">
-          <button class="master-switcher-btn" id="master-switcher-button" type="button" aria-haspopup="menu" aria-expanded="false">
+          <button class="master-switcher-btn" id="master-switcher-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="master-switcher-menu">
             <span class="master-switcher-mark">K</span>
             <span class="master-switcher-copy"><strong>Ken's Life</strong><span id="master-current">What should I do today?</span></span>
             <i data-lucide="chevron-down"></i>
           </button>
-          <div class="master-switcher-menu" role="menu">
+          <div class="master-switcher-menu" id="master-switcher-menu" role="menu" aria-label="Ken's Life navigation">
             <div class="master-menu-label">Ken's Life</div>
             <a class="master-menu-item" href="#home" data-route="home"><i data-lucide="sparkles"></i><span>What should I do today?</span></a>
             <a class="master-menu-item" href="#todo" data-route="todo"><i data-lucide="check-square-2"></i><span>To-Do</span></a>
@@ -78,16 +82,16 @@
         <div class="topbar-divider"></div>
         <div class="page-title"><span id="page-kicker">KEN'S LIFE</span><h1 id="page-title">Today</h1></div>
         <div class="top-actions">
-          <button class="btn ghost" id="refresh"><i data-lucide="refresh-cw"></i><span class="desktop-only">Refresh</span></button>
-          <button class="btn primary" id="quick-add"><i data-lucide="plus"></i><span>New task</span></button>
+          <button class="btn ghost" id="refresh" aria-label="Refresh current view"><i data-lucide="refresh-cw"></i><span class="desktop-only">Refresh</span></button>
+          <button class="btn primary" id="quick-add" aria-label="New task"><i data-lucide="plus"></i><span>New task</span></button>
         </div>
       </header>
       <div id="view" class="view"><div class="skeleton-page"></div></div>
     </main>
   </div>
 
-  <div id="modal" class="modal hidden" aria-hidden="true"><div class="modal-backdrop" data-close-modal></div><div class="modal-card"><div class="modal-head"><div><span id="modal-kicker"></span><h2 id="modal-title"></h2></div><button class="icon-btn" data-close-modal>×</button></div><div id="modal-body" class="modal-body"></div></div></div>
-  <div id="toast" class="toast"></div>
+  <div id="modal" class="modal hidden" aria-hidden="true"><div class="modal-backdrop" data-close-modal></div><div class="modal-card"><div class="modal-head"><div><span id="modal-kicker"></span><h2 id="modal-title"></h2></div><button class="icon-btn" data-close-modal aria-label="Close">×</button></div><div id="modal-body" class="modal-body"></div></div></div>
+  <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -96,7 +100,7 @@
   <script type="module" src="app.js?v=1"></script>
   <script type="module" src="pipeline-parity.js?v=1"></script>
   <script type="module" src="life-parity.js?v=1"></script>
-  <script type="module" src="source-guards.js?v=6"></script>
-  <script src="master-switcher.js?v=2"></script>
+  <script type="module" src="source-guards.js?v=7"></script>
+  <script src="master-switcher.js?v=3"></script>
 </body>
 </html>
