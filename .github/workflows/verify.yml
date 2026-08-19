@@ -19,4 +19,5 @@ jobs:
         run: |
           node --check app.js
           node --check pipeline-parity.js
+          node --check life-parity.js
           node --check reference-data.js
