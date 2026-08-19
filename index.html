@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="styles.css?v=1" />
+  <link rel="stylesheet" href="master-switcher.css?v=1" />
 </head>
 <body>
   <div id="boot" class="boot"><div class="boot-mark">K</div><div><b>Ken's Life</b><span>Loading your command center…</span></div></div>
@@ -28,7 +29,7 @@
   </section>
 
   <div id="app" class="app hidden">
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" aria-hidden="true">
       <div class="sidebar-head">
         <div class="brand-mark small">K</div>
         <div><strong>Ken's Life</strong><span>Master command center</span></div>
@@ -41,7 +42,6 @@
           <a class="nav-item" href="#all-tasks" data-route="all-tasks"><i data-lucide="check-square-2"></i><span>All Tasks</span><em id="nav-task-count"></em></a>
           <a class="nav-item" href="#calendar" data-route="calendar"><i data-lucide="calendar-days"></i><span>Unified Calendar</span></a>
         </div>
-
         <div class="nav-group"><div class="nav-label">Dashboards</div>
           <a class="nav-item" href="#health" data-route="health"><i data-lucide="user-round"></i><span>Personal OS</span></a>
           <a class="nav-item" href="#primeva-ceo" data-route="primeva-ceo"><i data-lucide="layout-dashboard"></i><span>Primeva OS</span></a>
@@ -58,6 +58,27 @@
     <main class="main">
       <header class="topbar">
         <button class="icon-btn mobile-only" id="open-nav" aria-label="Open navigation"><i data-lucide="menu"></i></button>
+
+        <div class="master-switcher" id="master-switcher">
+          <button class="master-switcher-btn" id="master-switcher-button" type="button" aria-haspopup="menu" aria-expanded="false">
+            <span class="master-switcher-mark">K</span>
+            <span class="master-switcher-copy"><strong>Ken's Life</strong><span id="master-current">Today</span></span>
+            <i data-lucide="chevron-down"></i>
+          </button>
+          <div class="master-switcher-menu" role="menu">
+            <div class="master-menu-label">Command Center</div>
+            <a class="master-menu-item" href="#home" data-route="home"><i data-lucide="sparkles"></i><span>What should I do today?</span></a>
+            <a class="master-menu-item" href="#all-tasks" data-route="all-tasks"><i data-lucide="check-square-2"></i><span>All Tasks</span></a>
+            <a class="master-menu-item" href="#calendar" data-route="calendar"><i data-lucide="calendar-days"></i><span>Unified Calendar</span></a>
+            <div class="master-menu-sep"></div>
+            <div class="master-menu-label">Dashboards</div>
+            <a class="master-menu-item" href="#health" data-route="health"><i data-lucide="user-round"></i><span>Personal OS</span><small>Live</small></a>
+            <a class="master-menu-item" href="#primeva-ceo" data-route="primeva-ceo"><i data-lucide="layout-dashboard"></i><span>Primeva OS</span><small>Live</small></a>
+            <a class="master-menu-item" href="#tr-today" data-route="tr-today"><i data-lucide="building-2"></i><span>Three Rivers</span><small>Live</small></a>
+          </div>
+        </div>
+
+        <div class="topbar-divider"></div>
         <div class="page-title"><span id="page-kicker">KEN'S LIFE</span><h1 id="page-title">Today</h1></div>
         <div class="top-actions">
           <button class="btn ghost" id="refresh"><i data-lucide="refresh-cw"></i><span class="desktop-only">Refresh</span></button>
@@ -79,5 +100,6 @@
   <script type="module" src="pipeline-parity.js?v=1"></script>
   <script type="module" src="life-parity.js?v=1"></script>
   <script type="module" src="source-guards.js?v=3"></script>
+  <script src="master-switcher.js?v=1"></script>
 </body>
 </html>
