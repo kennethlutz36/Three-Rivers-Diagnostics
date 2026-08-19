@@ -1,0 +1,1 @@
+GitHub Pages enabled for Ken's Life on 2026-08-19. This file exists only to trigger the first Pages deployment after enabling GitHub Actions as the Pages source.
