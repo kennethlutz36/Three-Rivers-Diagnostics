@@ -8,17 +8,12 @@ permissions:
   contents: read
 
 jobs:
-  syntax:
+  release-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify application scripts
-        run: |
-          node --check app.js
-          node --check pipeline-parity.js
-          node --check life-parity.js
-          node --check source-guards.js
-          node --check reference-data.js
+      - name: Run Ken's Life release checks
+        run: npm run check
