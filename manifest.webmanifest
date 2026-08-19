@@ -1,0 +1,12 @@
+{
+  "name": "Ken's Life",
+  "short_name": "Ken's Life",
+  "start_url": "./#home",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F7FB",
+  "theme_color": "#0A1A26",
+  "icons": [
+    {"src":"app-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
