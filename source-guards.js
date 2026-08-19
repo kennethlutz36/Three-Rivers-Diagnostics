@@ -18,13 +18,19 @@ document.addEventListener('submit',e=>{
 if(!document.querySelector('link[data-kens-exact-source]')){
   const l=document.createElement('link');
   l.rel='stylesheet';
-  l.href='exact-source-pages.css?v=5';
+  l.href='exact-source-pages.css?v=6';
   l.dataset.kensExactSource='1';
   document.head.appendChild(l);
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=5';
+  s.src='exact-source-pages.js?v=6';
   s.dataset.kensExactSource='1';
+  document.body.appendChild(s);
+}
+if(!document.querySelector('script[data-kens-personal-route-bridge]')){
+  const s=document.createElement('script');
+  s.src='personal-route-bridge-v6.js?v=1';
+  s.dataset.kensPersonalRouteBridge='1';
   document.body.appendChild(s);
 }
