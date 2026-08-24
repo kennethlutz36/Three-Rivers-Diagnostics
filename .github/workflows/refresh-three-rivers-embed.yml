@@ -1,0 +1,59 @@
+name: Refresh Three Rivers embed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/refresh-three-rivers-embed.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache-bust embedded Three Rivers dashboard
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          stamp='20260824fix4'
+
+          p=Path('exact-source-pages.js')
+          t=p.read_text()
+          base='https://goldenrod-stinkbug-404688.hostingersite.com/'
+          t=re.sub(r'https://goldenrod-stinkbug-404688\.hostingersite\.com/(?:\?v=[^#\'\"]+)?#(command|accounts|pipeline|tasks|route|panels|payors)',
+                   lambda m: f'{base}?v={stamp}#{m.group(1)}',t)
+          for route in ['command','accounts','pipeline','tasks','route','panels','payors']:
+              assert f'{base}?v={stamp}#{route}' in t, route
+          p.write_text(t)
+
+          p=Path('source-guards.js')
+          t=p.read_text()
+          t=re.sub(r'exact-source-pages\.js\?v=[^\'\"]+','exact-source-pages.js?v='+stamp,t)
+          assert 'exact-source-pages.js?v='+stamp in t
+          p.write_text(t)
+
+          p=Path('index.html')
+          t=p.read_text()
+          t=re.sub(r'source-guards\.js\?v=[^\'\"]+','source-guards.js?v='+stamp,t)
+          assert 'source-guards.js?v='+stamp in t
+          p.write_text(t)
+          print('THREE RIVERS EMBED REFRESHED')
+          PY
+      - name: Commit refresh
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet; then exit 0; fi
+          git add exact-source-pages.js source-guards.js index.html
+          git commit -m 'Refresh embedded Three Rivers production build'
+          git push
