@@ -1,3 +1,4 @@
+// Embedded Three Rivers release marker: 20260824fix4
 // Client-side guardrails that mirror source database requirements.
 // Server-side validation remains authoritative.
 
