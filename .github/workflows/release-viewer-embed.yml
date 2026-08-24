@@ -1,0 +1,53 @@
+name: Release Three Rivers viewer embed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-viewer-embed.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Refresh Three Rivers embed cache versions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          version='20260824viewer1'
+          files=['exact-source-pages.js','source-guards.js','index.html','qa-smoke.js']
+          for name in files:
+              p=Path(name)
+              t=p.read_text()
+              t=t.replace('20260824fix4',version)
+              p.write_text(t)
+          exact=Path('exact-source-pages.js').read_text()
+          source=Path('source-guards.js').read_text()
+          index=Path('index.html').read_text()
+          qa=Path('qa-smoke.js').read_text()
+          assert f'?v={version}#command' in exact
+          assert f'exact-source-pages.js?v={version}' in source
+          assert f'source-guards.js?v={version}' in index
+          assert version in qa
+          PY
+      - name: Verify JavaScript
+        run: |
+          node --check exact-source-pages.js
+          node --check source-guards.js
+          node --check qa-smoke.js
+          npm run check
+      - name: Commit refreshed embed
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add exact-source-pages.js source-guards.js index.html qa-smoke.js
+          git commit -m 'Load Three Rivers view-only access build'
+          git push
