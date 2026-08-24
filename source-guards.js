@@ -30,7 +30,7 @@ if(!document.querySelector('link[data-kens-exact-source]')){
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=7';
+  s.src='exact-source-pages.js?v=20260824fix4';
   s.dataset.kensExactSource='1';
   document.body.appendChild(s);
 }

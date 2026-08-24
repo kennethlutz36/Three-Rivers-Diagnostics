@@ -26,13 +26,13 @@ const SOURCES={
   'labs-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/labs/content',external:true},
   'health-crm':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/crm',external:true},
   'health-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/content',external:true},
-  'tr-today':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#command',external:true},
-  'tr-active':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#accounts',external:true},
-  'tr-pipeline':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#pipeline',external:true},
-  'tr-tasks':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#tasks',external:true},
-  'tr-route':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#route',external:true},
-  'tr-panels':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#panels',external:true},
-  'tr-payors':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/#payors',external:true}
+  'tr-today':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#command',external:true},
+  'tr-active':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#accounts',external:true},
+  'tr-pipeline':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#pipeline',external:true},
+  'tr-tasks':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#tasks',external:true},
+  'tr-route':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#route',external:true},
+  'tr-panels':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#panels',external:true},
+  'tr-payors':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260824fix4#payors',external:true}
 };
 
 let applying=false;
