@@ -31,7 +31,7 @@ if(!document.querySelector('link[data-kens-exact-source]')){
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=20260824viewer1';
+  s.src='exact-source-pages.js?v=20260826routeplan1';
   s.dataset.kensExactSource='1';
   document.body.appendChild(s);
 }
