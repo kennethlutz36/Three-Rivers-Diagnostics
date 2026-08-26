@@ -4,7 +4,7 @@ if(window.__kensThreeRiversLiveRefresh)return;
 window.__kensThreeRiversLiveRefresh=1;
 
 const HOST='goldenrod-stinkbug-404688.hostingersite.com';
-const TOKEN='20260826todaylayout4';
+const TOKEN='20260826todaygrid5';
 let timer=0;
 
 function refreshThreeRiversFrame(){
