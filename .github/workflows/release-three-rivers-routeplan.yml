@@ -1,0 +1,39 @@
+name: Refresh embedded Three Rivers route planner
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-three-rivers-routeplan.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache bust embedded Three Rivers source
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('exact-source-pages.js'); s=p.read_text().replace('20260826exact3','20260826routeplan1'); p.write_text(s)
+          p=Path('source-guards.js'); s=p.read_text().replace('exact-source-pages.js?v=20260824viewer1','exact-source-pages.js?v=20260826routeplan1'); p.write_text(s)
+          p=Path('index.html'); s=p.read_text().replace('source-guards.js?v=20260824viewer1','source-guards.js?v=20260826routeplan1'); p.write_text(s)
+          PY
+          grep -Fq '20260826routeplan1#command' exact-source-pages.js
+          grep -Fq 'exact-source-pages.js?v=20260826routeplan1' source-guards.js
+          grep -Fq 'source-guards.js?v=20260826routeplan1' index.html
+      - name: Commit embed refresh
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add exact-source-pages.js source-guards.js index.html
+          git commit -m 'Refresh embedded Three Rivers route planner'
+          git push
