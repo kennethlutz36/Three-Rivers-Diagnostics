@@ -1,4 +1,4 @@
-// Embedded Three Rivers release marker: 20260826routetier2
+// Embedded Three Rivers release marker: 20260826todayrestore3
 // Client-side guardrails that mirror source database requirements.
 // Server-side validation remains authoritative.
 
@@ -31,7 +31,7 @@ if(!document.querySelector('link[data-kens-exact-source]')){
 }
 if(!document.querySelector('script[data-kens-exact-source]')){
   const s=document.createElement('script');
-  s.src='exact-source-pages.js?v=20260826route-tier2';
+  s.src='exact-source-pages.js?v=20260826todayrestore3';
   s.dataset.kensExactSource='1';
   document.body.appendChild(s);
 }
