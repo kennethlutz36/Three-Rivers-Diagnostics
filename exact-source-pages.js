@@ -26,13 +26,13 @@ const SOURCES={
   'labs-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/labs/content',external:true},
   'health-crm':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/crm',external:true},
   'health-content':{system:'Primeva OS',url:'https://primeva-os.vercel.app/health/content',external:true},
-  'tr-today':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#command',external:true},
-  'tr-active':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#accounts',external:true},
-  'tr-pipeline':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#pipeline',external:true},
-  'tr-tasks':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#tasks',external:true},
-  'tr-route':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#route',external:true},
-  'tr-panels':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#panels',external:true},
-  'tr-payors':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826routeplan1#payors',external:true}
+  'tr-today':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#command',external:true},
+  'tr-active':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#accounts',external:true},
+  'tr-pipeline':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#pipeline',external:true},
+  'tr-tasks':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#tasks',external:true},
+  'tr-route':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#route',external:true},
+  'tr-panels':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#panels',external:true},
+  'tr-payors':{system:'Three Rivers',url:'https://goldenrod-stinkbug-404688.hostingersite.com/?v=20260826route-tier2#payors',external:true}
 };
 
 let applying=false;
