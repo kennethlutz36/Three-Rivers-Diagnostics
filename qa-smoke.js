@@ -21,7 +21,7 @@ for(const route of routeOrder){
 
 assert(index.includes('rel="apple-touch-icon"'),'Missing Apple touch icon link');
 assert(index.includes('manifest.webmanifest?v=2'),'Manifest cache version not current');
-assert(index.includes('source-guards.js?v=20260824viewer1'),'Source integration cache version not current');
+assert(index.includes('source-guards.js?v=20260826routetier2'),'Source integration cache version not current');
 assert(index.includes('master-switcher.css?v=3'),'Responsive shell cache version not current');
 assert(index.includes('master-switcher.js?v=3'),'Navigation cache version not current');
 
@@ -32,7 +32,7 @@ assert(manifest.id==='./','PWA manifest must have a stable app id');
 assert(manifest.start_url==='./#home','PWA must open on Ken\'s Life Today');
 assert(Array.isArray(manifest.icons)&&manifest.icons.length>=2,'PWA manifest icons missing');
 
-assert(source.includes('exact-source-pages.js?v=20260824viewer1'),'Source loader is not using the refreshed exact-source controller');
+assert(source.includes('exact-source-pages.js?v=20260826route-tier2'),'Source loader is not using the refreshed exact-source controller');
 assert(!source.includes('personal-route-bridge-v6.js'),'Obsolete duplicate Personal route controller is still loaded');
 assert(exact.includes('KensLifeEmbed'),'Personal OS navigation bridge is not used');
 assert(exact.includes("'To-Do':'tasks'"),'To-Do must map to Personal OS tasks');
